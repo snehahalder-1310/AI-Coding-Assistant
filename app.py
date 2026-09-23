@@ -1,50 +1,37 @@
-
 import os
-import torch
 
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+from huggingface_hub import InferenceClient
 
-from transformers import AutoTokenizer, AutoModelForCausalLM
 
+# ============================================================
+# HUGGING FACE SETUP
+# ============================================================
+
+hf_token = os.environ.get("HF_TOKEN")
+
+if not hf_token:
+    raise RuntimeError("HF_TOKEN environment variable is not set.")
+
+client = InferenceClient(
+    api_key=hf_token
+)
+
+MODEL_NAME = "Qwen/Qwen2.5-Coder-7B-Instruct"
+
+
+# ============================================================
+# FLASK APP
+# ============================================================
 
 app = Flask(__name__)
-
 CORS(app)
 
 
-# ==========================================
-# LOAD PHI-3
-# ==========================================
-
-model_name = "microsoft/Phi-3-mini-4k-instruct"
-
-print("Loading tokenizer...")
-
-tokenizer = AutoTokenizer.from_pretrained(
-    model_name
-)
-
-
-print("Loading model...")
-
-model = AutoModelForCausalLM.from_pretrained(
-
-    model_name,
-
-    torch_dtype=torch.float16,
-
-    device_map="auto"
-
-)
-
-
-print("Model loaded successfully!")
-
-
-# ==========================================
+# ============================================================
 # PROMPT GENERATION
-# ==========================================
+# ============================================================
 
 def generate_prompts(question, language, task_type):
 
@@ -63,7 +50,6 @@ Provide simple and readable {language} code.
 Include an example and explain time and space complexity.
 """
 
-
         prompt2 = f"""
 Act as an expert {language} programming assistant.
 
@@ -78,7 +64,6 @@ Explain the algorithm, correctness, time complexity,
 space complexity, and sample input/output.
 """
 
-
         prompt3 = f"""
 Act as a competitive programming and technical interview expert.
 
@@ -92,7 +77,6 @@ Explain the algorithm clearly.
 Provide clean executable {language} code.
 Include sample input/output and analyze time and space complexity.
 """
-
 
         return prompt1, prompt2, prompt3
 
@@ -112,7 +96,6 @@ Describe the important statements.
 Also explain the time and space complexity.
 """
 
-
         prompt2 = f"""
 Act as an expert {language} programming assistant.
 
@@ -126,7 +109,6 @@ time complexity, and space complexity.
 Use examples where helpful.
 """
 
-
         prompt3 = f"""
 Act as a competitive programming and technical interview expert.
 
@@ -138,7 +120,6 @@ Explain the algorithm and implementation.
 Discuss important logic, edge cases, time complexity,
 space complexity, and possible improvements.
 """
-
 
         return prompt1, prompt2, prompt3
 
@@ -166,94 +147,46 @@ Finally, briefly explain the important changes and
 mention any important edge cases if necessary.
 """
 
-
         return debug_prompt, None, None
 
 
-# ==========================================
-# AI RESPONSE
-# ==========================================
+# ============================================================
+# AI RESPONSE GENERATION
+# ============================================================
 
 def generate_response(selected_prompt):
 
-    messages = [
-
-        {
-            "role": "user",
-            "content": selected_prompt
-        }
-
-    ]
-
-
-    input_text = tokenizer.apply_chat_template(
-
-        messages,
-
-        tokenize=False,
-
-        add_generation_prompt=True
-
-    )
-
-
-    inputs = tokenizer(
-
-        input_text,
-
-        return_tensors="pt"
-
-    ).to(model.device)
-
-
-    outputs = model.generate(
-
-        **inputs,
-
-        max_new_tokens=600,
-
-        temperature=0.7,
-
-        do_sample=True
-
-    )
-
-
-    response = tokenizer.decode(
-
-        outputs[0][
-            inputs["input_ids"].shape[1]:
+    completion = client.chat_completion(
+        model=MODEL_NAME,
+        messages=[
+            {
+                "role": "user",
+                "content": selected_prompt
+            }
         ],
-
-        skip_special_tokens=True
-
+        max_tokens=600,
+        temperature=0.7
     )
 
+    response = completion.choices[0].message.content
 
     return response
 
 
-# ==========================================
-# HOME
-# ==========================================
+# ============================================================
+# HOME PAGE
+# ============================================================
 
 @app.route("/")
 def home():
-
-    return render_template(
-        "index.html"
-    )
+    return render_template("index.html")
 
 
-# ==========================================
-# GENERATE
-# ==========================================
+# ============================================================
+# GENERATE RESPONSE API
+# ============================================================
 
-@app.route(
-    "/generate",
-    methods=["POST"]
-)
-
+@app.route("/generate", methods=["POST"])
 def generate():
 
     try:
@@ -261,124 +194,86 @@ def generate():
         data = request.get_json()
 
         language = data.get("language")
-
         task_type = data.get("task_type")
-
         question = data.get("question")
-
-        prompt_choice = data.get(
-            "prompt_choice"
-        )
+        prompt_choice = data.get("prompt_choice")
 
 
+        # Check question
         if not question or not question.strip():
 
             return jsonify({
-
                 "success": False,
-
-                "error":
-                "Please enter a programming request or paste your code."
-
+                "error": "Please enter a programming request or paste your code."
             })
 
 
+        # Generate the three prompt versions
         prompt1, prompt2, prompt3 = generate_prompts(
-
             question,
-
             language,
-
             task_type
-
         )
 
 
+        # Select prompt
         if task_type == "Debug Code":
 
             selected_prompt = prompt1
-
             prompt_name = "Debugging Prompt"
-
 
         else:
 
             if prompt_choice == "Beginner-focused":
 
                 selected_prompt = prompt1
-
                 prompt_name = "Beginner-focused"
-
 
             elif prompt_choice == "Technical":
 
                 selected_prompt = prompt2
-
                 prompt_name = "Technical"
-
 
             else:
 
                 selected_prompt = prompt3
-
                 prompt_name = "Interview-focused"
 
 
-        response = generate_response(
-            selected_prompt
-        )
+        # Generate AI response
+        response = generate_response(selected_prompt)
 
 
+        # Send result to frontend
         return jsonify({
-
             "success": True,
-
             "language": language,
-
             "task_type": task_type,
-
             "prompt_name": prompt_name,
-
             "question": question,
-
-            "selected_prompt":
-                selected_prompt,
-
+            "selected_prompt": selected_prompt,
             "response": response
-
         })
 
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
             "error": str(e)
-
         })
 
 
-# ==========================================
-# START SERVER
-# ==========================================
+# ============================================================
+# RUN FLASK
+# ============================================================
 
 if __name__ == "__main__":
 
-    port = int(
-        os.environ.get(
-            "PORT",
-            5000
-        )
-    )
+    port = int(os.environ.get("PORT", 5000))
 
     app.run(
-
         host="0.0.0.0",
-
         port=port,
-
         debug=False
-
     )
