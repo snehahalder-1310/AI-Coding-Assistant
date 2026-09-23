@@ -1,7 +1,4 @@
 flask
 flask-cors
-torch
-transformers
-accelerate
-sentencepiece
+huggingface_hub
 gunicorn
