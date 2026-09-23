@@ -160,12 +160,35 @@ def generate_response(selected_prompt):
         model=MODEL_NAME,
         messages=[
             {
+                "role": "system",
+                "content": """
+You are an AI coding assistant.
+
+Always provide a clean, complete, and well-structured answer.
+
+For coding problems:
+- Provide complete executable code.
+- Use a proper Markdown code block.
+- Use the correct language identifier:
+  ```c
+  ```cpp
+  ```python
+  ```java
+- Do not cut off the code.
+- Keep code separate from explanation.
+- Explain the solution clearly after the code.
+- Include sample input/output when useful.
+- Include time and space complexity when appropriate.
+- For debugging, identify the errors and then provide the complete corrected code.
+"""
+            },
+            {
                 "role": "user",
                 "content": selected_prompt
             }
         ],
-        max_tokens=600,
-        temperature=0.7
+        max_tokens=1500,
+        temperature=0.5
     )
 
     response = completion.choices[0].message.content
