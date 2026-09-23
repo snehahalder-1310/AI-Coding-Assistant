@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Coding Assistant</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🤖</span>
+                <div>
+                    <h1>AI Coding Assistant</h1>
+                    <p>AI-powered coding help with intelligent prompt generation</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- LANGUAGE + TASK -->
+
+        <section class="card">
+
+            <h2>⚙️ Coding Preferences</h2>
+
+            <div class="top-selection-grid">
+
+                <div class="selection-box">
+
+                    <label for="language">
+                        Programming Language
+                    </label>
+
+                    <select id="language" class="selection-dropdown">
+
+                        <option value="C">C</option>
+
+                        <option value="C++">C++</option>
+
+                        <option value="Python" selected>
+                            Python
+                        </option>
+
+                        <option value="Java">Java</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="selection-box">
+
+                    <label for="task_type">
+                        Task Type
+                    </label>
+
+                    <select id="task_type" class="selection-dropdown">
+
+                        <option value="Generate Code" selected>
+                            Generate Code
+                        </option>
+
+                        <option value="Debug Code">
+                            Debug Code
+                        </option>
+
+                        <option value="Explain Code">
+                            Explain Code
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CODING REQUEST -->
+
+        <section class="card">
+
+            <div class="section-title-row">
+
+                <h2 id="question-title">
+                    💻 Enter Your Coding Request
+                </h2>
+
+                <span id="char-count">
+                    0 characters
+                </span>
+
+            </div>
+
+
+            <textarea
+                id="question"
+                placeholder="Example: Write a Python program to check whether a number is prime."
+                rows="8"></textarea>
+
+        </section>
+
+
+        <!-- PROMPT STYLE -->
+
+        <section class="card" id="prompt-section">
+
+            <h2>🎯 Choose Prompt Style</h2>
+
+            <div class="prompt-options">
+
+                <label class="prompt-card">
+
+                    <input
+                        type="radio"
+                        name="prompt_choice"
+                        value="Beginner-focused"
+                        checked>
+
+                    <div class="prompt-content">
+
+                        <strong>Beginner-focused</strong>
+
+                        <span>
+                            Simple explanation and readable code
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <label class="prompt-card">
+
+                    <input
+                        type="radio"
+                        name="prompt_choice"
+                        value="Technical">
+
+                    <div class="prompt-content">
+
+                        <strong>Technical</strong>
+
+                        <span>
+                            Algorithms, correctness and complexity
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <label class="prompt-card">
+
+                    <input
+                        type="radio"
+                        name="prompt_choice"
+                        value="Interview-focused">
+
+                    <div class="prompt-content">
+
+                        <strong>Interview-focused</strong>
+
+                        <span>
+                            Optimized solutions and edge cases
+                        </span>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <!-- BUTTON -->
+
+        <button id="generate-btn" class="generate-btn">
+
+            <span id="button-text">
+                🚀 Generate Response
+            </span>
+
+            <span id="loading-text" style="display:none;">
+                ⏳ Generating...
+            </span>
+
+        </button>
+
+
+        <!-- ERROR -->
+
+        <div id="error-box" class="error-box" style="display:none;"></div>
+
+
+        <!-- RESULTS -->
+
+        <section id="results" style="display:none;">
+
+            <!-- SELECTION -->
+
+            <div class="result-card">
+
+                <div class="result-header">
+
+                    <h2>📌 Your Selection</h2>
+
+                </div>
+
+                <div id="selection-result"></div>
+
+            </div>
+
+
+            <!-- PROMPT -->
+
+            <div class="result-card">
+
+                <div class="result-header">
+
+                    <h2>🧠 Generated / Selected Prompt</h2>
+
+                    <button
+                        class="copy-btn"
+                        onclick="copyPrompt()">
+                        Copy
+                    </button>
+
+                </div>
+
+                <pre id="prompt-result"></pre>
+
+            </div>
+
+
+            <!-- RESPONSE -->
+
+            <div class="result-card">
+
+                <div class="result-header">
+
+                    <h2>🤖 AI Response</h2>
+
+                    <button
+                        class="copy-btn"
+                        onclick="copyResponse()">
+                        Copy
+                    </button>
+
+                </div>
+
+                <pre id="response-result"></pre>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            AI Coding Assistant
+            <span>•</span>
+            Designed & Developed by
+            <strong>Sneha Halder</strong>
+        </p>
+
+    </footer>
+
+
+    <script src="/static/script.js"></script>
+
+</body>
+
+</html>
