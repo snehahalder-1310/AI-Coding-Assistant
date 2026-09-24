@@ -5,10 +5,8 @@ from flask_cors import CORS
 from huggingface_hub import InferenceClient
 
 
-# ============================================================
-# HUGGING FACE SETUP
-# ============================================================
 
+# HUGGING FACE SETUP
 hf_token = os.environ.get("HF_TOKEN")
 
 if not hf_token:
@@ -21,18 +19,14 @@ client = InferenceClient(
 MODEL_NAME = "Qwen/Qwen2.5-Coder-7B-Instruct"
 
 
-# ============================================================
-# FLASK APP
-# ============================================================
 
+# FLASK APP
 app = Flask(__name__)
 CORS(app)
 
 
-# ============================================================
-# PROMPT GENERATION
-# ============================================================
 
+# PROMPT GENERATION
 def generate_prompts(question, language, task_type):
 
     if task_type == "Generate Code":
@@ -149,129 +143,13 @@ mention any important edge cases if necessary.
         return debug_prompt, None, None
 
 
-# ============================================================
+
 # AI RESPONSE GENERATION
-# ============================================================
-
-
 def generate_response(selected_prompt):
 
-    system_prompt = """
-You are an AI Coding Assistant.
-
-Follow the user's selected prompt carefully.
-
-IMPORTANT RULES:
-
-1. Follow every requirement mentioned in the user's prompt.
-
-2. Always provide correct and complete answers.
-
-3. For Generate Code tasks:
-   - Provide a complete standalone program.
-   - The user should be able to copy the code and run it directly.
-   - Do not provide only a function unless the user specifically asks for one.
-   - Use standard user input when input is required.
-   - Avoid unnecessary hardcoded values.
-   - Make sure the program prints the final result.
-
-4. For Explain Code tasks:
-   - Explain the code that the user provided.
-   - Do not unnecessarily rewrite the complete program.
-
-5. For Debug Code tasks:
-   - Identify the errors.
-   - Explain the errors.
-   - Provide the complete corrected executable program.
-
-6. Always use the correct programming language syntax.
-
-7. Put code inside a Markdown code block using the correct language.
-
-8. Keep explanations understandable and reasonably concise.
-
-9. If the user's prompt requests Algorithm, Correctness,
-   Complexity, Sample Input/Output, Edge Cases, or Constraints,
-   include those sections.
-
-10. Do not repeat the user's prompt unnecessarily.
-
-11. Do not add unrelated information.
-
-
-IMPORTANT INPUT AND OUTPUT RULES:
-
-12. The sample input must exactly match the input format used by the code.
-
-13. The sample output must be the actual output produced by the code.
-
-14. Never invent or guess sample output.
-
-15. Check the sample manually before giving the final answer.
-
-16. For array problems, clearly explain how the array elements are entered.
-
-17. Prefer simple input() or equivalent standard input methods.
-
-18. Avoid sys.stdin.read() unless the problem specifically requires it.
-
-19. The generated program must be easy for a beginner to copy,
-    run, enter their own input, and see the result.
-
-
-FORMATTING RULES:
-
-20. Do not use numbered lists for sections.
-
-21. Do not use bullet points for every sentence.
-
-22. Use only one simple circle symbol "●" for major section headings.
-
-23. Use headings such as:
-
-● Explanation
-● Algorithm
-● Correctness
-● Code
-● Sample Input
-● Sample Output
-● Time Complexity
-● Space Complexity
-● Edge Cases
-
-24. Keep each heading on its own line.
-
-25. Use normal paragraphs under each heading.
-
-26. Do not use multiple bullet styles or decorative symbols.
-
-27. Keep the response clean, simple, and easy to read.
-
-28. Always put programming code inside a proper Markdown code block.
-
-29. Do not add unnecessary sections or information.
-
-
-Before producing the final answer, check that:
-
-- The code is complete.
-- Variables are defined.
-- Functions are defined if used.
-- Input format matches the code.
-- Output format matches the code.
-- Sample input matches the code.
-- Sample output matches the actual code result.
-
-The user's selected prompt determines the required content
-and technical depth of the final answer.
-"""
     completion = client.chat_completion(
         model=MODEL_NAME,
         messages=[
-            {
-                "role": "system",
-                "content": system_prompt
-            },
             {
                 "role": "user",
                 "content": selected_prompt
@@ -285,19 +163,15 @@ and technical depth of the final answer.
 
     return response
 
-
-# ============================================================
 # HOME PAGE
-# ============================================================
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# ============================================================
+
 # GENERATE RESPONSE API
-# ============================================================
 
 @app.route("/generate", methods=["POST"])
 def generate():
@@ -377,9 +251,8 @@ def generate():
         })
 
 
-# ============================================================
+
 # RUN FLASK
-# ============================================================
 
 if __name__ == "__main__":
 
