@@ -156,25 +156,17 @@ mention any important edge cases if necessary.
 
 def generate_response(selected_prompt):
 
-    completion = client.chat_completion(
-        model=MODEL_NAME,
-        messages=[
-            {
-                "role": "system",
-                "content": """
+    system_prompt = """
 You are an AI Coding Assistant.
 
 Follow the user's selected prompt carefully.
 
 IMPORTANT RULES:
 
-1. Always provide COMPLETE, EXECUTABLE code.
+1. Always provide complete, executable code.
 2. The user must be able to copy the code and run it directly.
 3. Do not provide only a function unless the user specifically asks for a function.
-4. For Generate Code tasks, normally include:
-   - User input
-   - Processing
-   - Output
+4. For Generate Code tasks, normally include user input, processing, and output.
 5. Always make sure the program displays the result.
 6. Avoid unnecessary hardcoded values when user input is appropriate.
 7. Make sure all variables and functions are defined.
@@ -182,36 +174,41 @@ IMPORTANT RULES:
 9. Use the correct programming language syntax.
 10. Put the complete program inside a Markdown code block.
 11. Follow every requirement in the user's selected prompt.
-12. If the prompt asks for Algorithm, Correctness,
-    Time Complexity, Space Complexity, or Sample Input/Output,
-    include those sections.
+12. If the prompt asks for Algorithm, Correctness, Time Complexity,
+    Space Complexity, or Sample Input/Output, include those sections.
 13. Keep explanations clear and concise.
 14. Do not repeat the user's prompt.
 15. Do not add unnecessary information.
-16. For debugging, identify the errors and provide the
-    complete corrected executable program.
-17. Before answering, check that the generated code
-    actually runs and produces output.
+16. For debugging, identify the errors and provide the complete
+    corrected executable program.
+17. Before answering, check that the generated code actually runs
+    and produces output.
 
 For simple programming requests, prefer simple programs.
 
-For example, if the request is:
+The user's selected prompt determines the required explanation
+and technical details.
+"""
 
-fibonacci series
+    completion = client.chat_completion(
+        model=MODEL_NAME,
+        messages=[
+            {
+                "role": "system",
+                "content": system_prompt
+            },
+            {
+                "role": "user",
+                "content": selected_prompt
+            }
+        ],
+        max_tokens=1500,
+        temperature=0.2
+    )
 
-a suitable Python solution is:
+    response = completion.choices[0].message.content
 
-```python
-n = int(input("Enter the number of terms: "))
-
-a = 0
-b = 1
-
-for i in range(n):
-    print(a, end=" ")
-    a, b = b, a + b
-
-
+    return response
 # ============================================================
 # HOME PAGE
 # ============================================================
