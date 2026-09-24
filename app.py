@@ -58,7 +58,6 @@ Solve the following programming task:
 {question}
 
 Provide an efficient and technically sound solution.
-Use appropriate algorithms and data structures.
 Provide complete {language} code.
 Explain the algorithm, correctness, time complexity,
 space complexity, and sample input/output.
@@ -187,62 +186,85 @@ IMPORTANT RULES:
 
 6. Always use the correct programming language syntax.
 
-7. Put code inside a Markdown code block using the correct language:
-   C -> ```c
-   C++ -> ```cpp
-   Python -> ```python
-   Java -> ```java
+7. Put code inside a Markdown code block using the correct language.
 
-8. Use clear headings.
+8. Keep explanations understandable and reasonably concise.
 
-9. Keep explanations understandable and reasonably concise.
+9. If the user's prompt requests Algorithm, Correctness,
+   Complexity, Sample Input/Output, Edge Cases, or Constraints,
+   include those sections.
 
-10. If the user's prompt requests:
-    - Algorithm
-    - Correctness
-    - Complexity
-    - Sample Input/Output
-    - Edge Cases
-    - Constraints
-    then include those sections.
+10. Do not repeat the user's prompt unnecessarily.
 
-11. Do not repeat the user's prompt unnecessarily.
+11. Do not add unrelated information.
 
-12. Do not add unrelated information.
 
 IMPORTANT INPUT AND OUTPUT RULES:
 
-13. The sample input must exactly match the input format used by the code.
+12. The sample input must exactly match the input format used by the code.
 
-14. The sample output must be the actual output produced by the code.
+13. The sample output must be the actual output produced by the code.
 
-15. Never invent or guess sample output.
+14. Never invent or guess sample output.
 
-16. Check the sample manually before giving the final answer.
+15. Check the sample manually before giving the final answer.
 
-17. For array problems, clearly explain how the array elements are entered.
+16. For array problems, clearly explain how the array elements are entered.
 
-18. Prefer simple input() or equivalent standard input methods for normal
-    beginner and technical programming problems.
+17. Prefer simple input() or equivalent standard input methods.
 
-19. Avoid sys.stdin.read() unless the problem specifically requires it.
+18. Avoid sys.stdin.read() unless the problem specifically requires it.
 
-20. The generated program must be easy for a beginner to copy, run,
-    enter their own input, and see the result.
+19. The generated program must be easy for a beginner to copy,
+    run, enter their own input, and see the result.
 
-21. Before producing the final answer, check that:
-    - The code is complete.
-    - Variables are defined.
-    - Functions are defined if used.
-    - Input format matches the code.
-    - Output format matches the code.
-    - Sample input matches the code.
-    - Sample output matches the actual code result.
 
-The user's selected prompt determines the required content and
-technical depth of the final answer.
+FORMATTING RULES:
+
+20. Do not use numbered lists for sections.
+
+21. Do not use bullet points for every sentence.
+
+22. Use only one simple circle symbol "●" for major section headings.
+
+23. Use headings such as:
+
+● Explanation
+● Algorithm
+● Correctness
+● Code
+● Sample Input
+● Sample Output
+● Time Complexity
+● Space Complexity
+● Edge Cases
+
+24. Keep each heading on its own line.
+
+25. Use normal paragraphs under each heading.
+
+26. Do not use multiple bullet styles or decorative symbols.
+
+27. Keep the response clean, simple, and easy to read.
+
+28. Always put programming code inside a proper Markdown code block.
+
+29. Do not add unnecessary sections or information.
+
+
+Before producing the final answer, check that:
+
+- The code is complete.
+- Variables are defined.
+- Functions are defined if used.
+- Input format matches the code.
+- Output format matches the code.
+- Sample input matches the code.
+- Sample output matches the actual code result.
+
+The user's selected prompt determines the required content
+and technical depth of the final answer.
 """
-
     completion = client.chat_completion(
         model=MODEL_NAME,
         messages=[
