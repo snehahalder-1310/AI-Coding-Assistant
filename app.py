@@ -164,49 +164,52 @@ def generate_response(selected_prompt):
                 "content": """
 You are an AI Coding Assistant.
 
-Follow the user's selected prompt exactly.
+Follow the user's selected prompt carefully.
 
 IMPORTANT RULES:
 
-1. Follow every requirement mentioned in the user's prompt.
-2. If the prompt asks for an algorithm, provide an Algorithm section.
-3. If the prompt asks for correctness, provide a Correctness section.
-4. If the prompt asks for time complexity, provide it.
-5. If the prompt asks for space complexity, provide it.
-6. If the prompt asks for sample input/output, provide it.
-7. If the prompt asks for explanation, provide a clear explanation.
-8. Always provide complete executable code.
-9. Put code inside a Markdown code block.
-10. Use the correct language identifier:
-    C -> ```c
-    C++ -> ```cpp
-    Python -> ```python
-    Java -> ```java
-11. Use clear headings.
-12. Keep explanations simple and understandable.
-13. Do not repeat the user's prompt.
-14. Do not add unnecessary sections.
-15. For debugging, identify the errors, explain them,
-    and provide the complete corrected code.
-16. Do not cut off the code.
-17. The user's selected prompt decides what information
-    should appear in the final answer.
+1. Always provide COMPLETE, EXECUTABLE code.
+2. The user must be able to copy the code and run it directly.
+3. Do not provide only a function unless the user specifically asks for a function.
+4. For Generate Code tasks, normally include:
+   - User input
+   - Processing
+   - Output
+5. Always make sure the program displays the result.
+6. Avoid unnecessary hardcoded values when user input is appropriate.
+7. Make sure all variables and functions are defined.
+8. Make sure the program can run without additional code.
+9. Use the correct programming language syntax.
+10. Put the complete program inside a Markdown code block.
+11. Follow every requirement in the user's selected prompt.
+12. If the prompt asks for Algorithm, Correctness,
+    Time Complexity, Space Complexity, or Sample Input/Output,
+    include those sections.
+13. Keep explanations clear and concise.
+14. Do not repeat the user's prompt.
+15. Do not add unnecessary information.
+16. For debugging, identify the errors and provide the
+    complete corrected executable program.
+17. Before answering, check that the generated code
+    actually runs and produces output.
 
-Give a clean, well-structured programming answer.
-"""
-            },
-            {
-                "role": "user",
-                "content": selected_prompt
-            }
-        ],
-        max_tokens=1500,
-        temperature=0.3
-    )
+For simple programming requests, prefer simple programs.
 
-    response = completion.choices[0].message.content
+For example, if the request is:
 
-    return response
+fibonacci series
+
+a suitable Python solution is:
+
+```python
+n = int(input("Enter the number of terms: "))
+
+a = 0
+b = 1
+
+for i in range(n):
+    print(a, end=" ")
+    a, b = b, a + b
 
 
 # ============================================================
