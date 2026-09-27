@@ -21,9 +21,7 @@ body {
 }
 
 
-/* ==============================
-   HEADER
-============================== */
+/* HEADER*/
 
 .header {
     background: linear-gradient(
@@ -67,9 +65,7 @@ body {
 }
 
 
-/* ==============================
-   MAIN CONTAINER
-============================== */
+/* MAIN CONTAINER*/
 
 .container {
     width: 92%;
@@ -78,9 +74,7 @@ body {
 }
 
 
-/* ==============================
-   CARDS
-============================== */
+/* CARDS */
 
 .card,
 .result-card {
@@ -101,9 +95,7 @@ body {
 }
 
 
-/* ==============================
-   LANGUAGE + TASK
-============================== */
+/* LANGUAGE + TASK */
 
 .top-selection-grid {
     display: grid;
@@ -142,9 +134,7 @@ body {
 }
 
 
-/* ==============================
-   TEXTAREA
-============================== */
+/*TEXTAREA */
 
 .section-title-row {
     display: flex;
@@ -184,9 +174,7 @@ textarea:focus {
 }
 
 
-/* ==============================
-   PROMPT OPTIONS
-============================== */
+/* PROMPT OPTIONS*/
 
 .prompt-options {
     display: grid;
@@ -244,9 +232,7 @@ textarea:focus {
 }
 
 
-/* ==============================
-   GENERATE BUTTON
-============================== */
+/*  GENERATE BUTTON*/
 
 .generate-btn {
     width: 100%;
@@ -280,9 +266,7 @@ textarea:focus {
 }
 
 
-/* ==============================
-   RESULTS
-============================== */
+/* RESULTS*/
 
 .result-header {
     display: flex;
@@ -318,30 +302,10 @@ pre {
 }
 
 
-.copy-btn {
-    border: none;
-
-    background: var(--main-color);
-
-    color: white;
-
-    padding: 9px 15px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-}
-
-
-.copy-btn:hover {
-    background: #4fb895;
-}
 
 
 
-/* ==============================
-   AI RESPONSE — REFERENCE STYLE
-============================== */
+/* AI RESPONSE — REFERENCE STYLE*/
 
 .ai-response-card {
     padding: 0;
@@ -597,9 +561,7 @@ pre {
     }
 }
 
-/* ==============================
-   ERROR
-============================== */
+/*  ERROR */
 
 .error-box {
     margin: 20px 0;
@@ -616,9 +578,7 @@ pre {
 }
 
 
-/* ==============================
-   FOOTER
-============================== */
+/*  FOOTER*/
 
 footer {
     text-align: center;
@@ -641,9 +601,7 @@ footer strong {
 }
 
 
-/* ==============================
-   MOBILE
-============================== */
+/* MOBILE */
 
 @media (max-width: 768px) {
 
@@ -695,4 +653,114 @@ footer strong {
         font-size: 16px;
     }
 
+}
+
+/* MODERN ICONS / HEADINGS */
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.heading-icon {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 34px;
+    border: 1px solid #cfe9df;
+    border-radius: 10px;
+    background: #f1faf6;
+    color: var(--main-color);
+}
+
+.heading-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.modern-icon {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,.45);
+    border-radius: 13px;
+    background: rgba(255,255,255,.14);
+}
+
+.modern-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.button-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: -4px;
+    margin-right: 7px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.spin { animation: spin 1s linear infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-width: 82px;
+    padding: 9px 13px;
+    border: 1px solid #bfe2d4;
+    background: #f1faf6;
+    color: #328f72;
+    font-weight: 600;
+    border-radius: 9px;
+    transition: .2s ease;
+}
+
+.copy-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.copy-btn:hover {
+    background: #e5f7ef;
+    border-color: var(--main-color);
+    transform: translateY(-1px);
+}
+
+.response-copy-btn {
+    background: #66CDAA;
+    color: white;
+    border-color: #66CDAA;
+}
+
+.response-copy-btn:hover {
+    background: #4fb895;
+    color: white;
 }
