@@ -215,11 +215,7 @@ generateBtn.addEventListener("click", async function () {
            SHOW AI RESPONSE
         ============================== */
 
-        document.getElementById(
-            "response-result"
-        ).textContent =
-            result.response;
-
+        renderAIResponse(result.response);
 
         results.style.display = "block";
 
@@ -279,13 +275,231 @@ function copyPrompt() {
 
 function copyResponse() {
 
-    const text =
-        document.getElementById(
-            "response-result"
-        ).textContent;
+    const responseElement =
+        document.getElementById("response-result");
 
-    navigator.clipboard.writeText(text);
+    const text = responseElement.innerText.trim();
 
+    navigator.clipboard.writeText(text).then(() => {
+
+        const button =
+            document.getElementById("response-copy-btn");
+
+        const originalText = button.textContent;
+
+        button.textContent = "Copied ✓";
+
+        setTimeout(() => {
+            button.textContent = originalText;
+        }, 1500);
+
+    });
+
+}
+
+
+/* ==============================
+   FORMAT AI RESPONSE
+============================== */
+
+function renderAIResponse(text) {
+
+    const container =
+        document.getElementById("response-result");
+
+    if (!text || !text.trim()) {
+
+        container.innerHTML = `
+            <p class="response-placeholder-title">
+                No response generated
+            </p>
+            <p class="response-placeholder-text">
+                Please try your request again.
+            </p>
+        `;
+
+        return;
+    }
+
+    let source = text
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .trim();
+
+    const codeBlocks = [];
+
+    source = source.replace(
+        /```([a-zA-Z0-9_+#.-]*)\n?([\s\S]*?)```/g,
+        function(match, language, code) {
+
+            const id = `__CODE_BLOCK_${codeBlocks.length}__`;
+
+            codeBlocks.push({
+                language: language || "code",
+                code: code.trim()
+            });
+
+            return id;
+        }
+    );
+
+    const lines = source.split("\n");
+    const output = [];
+    let inList = false;
+
+    function closeList() {
+        if (inList) {
+            output.push("</ul>");
+            inList = false;
+        }
+    }
+
+    lines.forEach(function(rawLine) {
+
+        const line = rawLine.trim();
+
+        if (!line) {
+            closeList();
+            return;
+        }
+
+        const codeMatch =
+            line.match(/^__CODE_BLOCK_(\d+)__$/);
+
+        if (codeMatch) {
+
+            closeList();
+
+            const block =
+                codeBlocks[Number(codeMatch[1])];
+
+            output.push(`
+                <div class="response-code-card">
+                    <div class="response-code-header">
+                        <span>${escapeHtml(block.language)}</span>
+                        <button
+                            class="code-copy-btn"
+                            onclick="copyCodeBlock(this)">
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code>${escapeHtml(block.code)}</code></pre>
+                </div>
+            `);
+
+            return;
+        }
+
+        const headingMatch =
+            line.match(/^#{1,3}\s+(.+)$/);
+
+        if (headingMatch) {
+            closeList();
+            output.push(
+                `<h3 class="ai-answer-heading">${formatInline(headingMatch[1])}</h3>`
+            );
+            return;
+        }
+
+        const boldTitle =
+            line.match(/^\*\*(.+?)\*\*:?\s*$/);
+
+        if (boldTitle) {
+            closeList();
+            output.push(
+                `<h3 class="ai-answer-heading">${formatInline(boldTitle[1])}</h3>`
+            );
+            return;
+        }
+
+        const bulletMatch =
+            line.match(/^(?:[-*]|•)\s+(.+)$/);
+
+        if (bulletMatch) {
+
+            if (!inList) {
+                output.push('<ul class="ai-answer-list">');
+                inList = true;
+            }
+
+            output.push(
+                `<li>${formatInline(bulletMatch[1])}</li>`
+            );
+
+            return;
+        }
+
+        const numberMatch =
+            line.match(/^\d+[.)]\s+(.+)$/);
+
+        if (numberMatch) {
+
+            if (!inList) {
+                output.push('<ul class="ai-answer-list numbered-list">');
+                inList = true;
+            }
+
+            output.push(
+                `<li>${formatInline(numberMatch[1])}</li>`
+            );
+
+            return;
+        }
+
+        closeList();
+
+        output.push(
+            `<p class="ai-answer-paragraph">${formatInline(line)}</p>`
+        );
+    });
+
+    closeList();
+
+    container.innerHTML = output.join("");
+}
+
+
+function formatInline(text) {
+
+    let safe = escapeHtml(text);
+
+    safe = safe.replace(
+        /`([^`]+)`/g,
+        '<code class="inline-code">$1</code>'
+    );
+
+    safe = safe.replace(
+        /\*\*(.+?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+    safe = safe.replace(
+        /\*([^*]+)\*/g,
+        "<em>$1</em>"
+    );
+
+    return safe;
+}
+
+
+function copyCodeBlock(button) {
+
+    const code =
+        button.closest(".response-code-card")
+            .querySelector("code")
+            .innerText;
+
+    navigator.clipboard.writeText(code).then(() => {
+
+        const original = button.textContent;
+
+        button.textContent = "Copied ✓";
+
+        setTimeout(() => {
+            button.textContent = original;
+        }, 1500);
+
+    });
 }
 
 
