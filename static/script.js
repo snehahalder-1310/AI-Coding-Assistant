@@ -30,9 +30,7 @@ const charCount =
     document.getElementById("char-count");
 
 
-/* ==============================
-   TASK TYPE CHANGE
-============================== */
+/* TASK TYPE CHANGE */
 
 taskType.addEventListener("change", function () {
 
@@ -41,7 +39,7 @@ taskType.addEventListener("change", function () {
         promptSection.style.display = "none";
 
         questionTitle.textContent =
-            "🐛 Paste Your Code to Debug";
+            "Paste Your Code to Debug";
 
         question.placeholder =
             "Paste your code here...";
@@ -53,7 +51,7 @@ taskType.addEventListener("change", function () {
         promptSection.style.display = "block";
 
         questionTitle.textContent =
-            "📖 Paste Your Code to Explain";
+            "Paste Your Code to Explain";
 
         question.placeholder =
             "Paste the code you want the AI to explain...";
@@ -65,7 +63,7 @@ taskType.addEventListener("change", function () {
         promptSection.style.display = "block";
 
         questionTitle.textContent =
-            "💻 Enter Your Coding Request";
+            "Enter Your Coding Request";
 
         question.placeholder =
             "Example: Write a Python program to check whether a number is prime.";
@@ -75,9 +73,7 @@ taskType.addEventListener("change", function () {
 });
 
 
-/* ==============================
-   CHARACTER COUNT
-============================== */
+/*CHARACTER COUNT */
 
 question.addEventListener("input", function () {
 
@@ -87,9 +83,7 @@ question.addEventListener("input", function () {
 });
 
 
-/* ==============================
-   GENERATE RESPONSE
-============================== */
+/* GENERATE RESPONSE */
 
 generateBtn.addEventListener("click", async function () {
 
@@ -175,9 +169,7 @@ generateBtn.addEventListener("click", async function () {
         }
 
 
-        /* ==============================
-           SHOW SELECTION
-        ============================== */
+        /*SHOW SELECTION */
 
         document.getElementById(
             "selection-result"
@@ -201,9 +193,7 @@ generateBtn.addEventListener("click", async function () {
         `;
 
 
-        /* ==============================
-           SHOW PROMPT
-        ============================== */
+        /* SHOW PROMPT */
 
         document.getElementById(
             "prompt-result"
@@ -211,9 +201,7 @@ generateBtn.addEventListener("click", async function () {
             result.selected_prompt;
 
 
-        /* ==============================
-           SHOW AI RESPONSE
-        ============================== */
+        /* SHOW AI RESPONSE */
 
         renderAIResponse(result.response);
 
@@ -253,9 +241,7 @@ generateBtn.addEventListener("click", async function () {
 });
 
 
-/* ==============================
-   COPY PROMPT
-============================== */
+/* COPY PROMPT*/
 
 function copyPrompt() {
 
@@ -269,9 +255,7 @@ function copyPrompt() {
 }
 
 
-/* ==============================
-   COPY RESPONSE
-============================== */
+/* COPY RESPONSE*/
 
 function copyResponse() {
 
@@ -298,9 +282,7 @@ function copyResponse() {
 }
 
 
-/* ==============================
-   FORMAT AI RESPONSE
-============================== */
+/* FORMAT AI RESPONSE*/
 
 function renderAIResponse(text) {
 
@@ -503,9 +485,7 @@ function copyCodeBlock(button) {
 }
 
 
-/* ==============================
-   HTML ESCAPE
-============================== */
+/* HTML ESCAPE */
 
 function escapeHtml(text) {
 
